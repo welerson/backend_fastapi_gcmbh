@@ -1,22 +1,9 @@
 # backend_fastapi/utils.py
 
 def gerar_relatorio_html(df):
-    import json
-
-    # Análise simples de exemplo: Ocorrência por dia da semana
-    dias = df['Dia da Semana'].value_counts(normalize=True) * 100
-    dias = dias.sort_index()
-    labels = list(dias.index)
-    valores = [round(p, 2) for p in dias.values]
-
-    labels_json = json.dumps(labels)
-    valores_json = json.dumps(valores)
-
-    html = f"""
+    # HTML sem gráfico
+    html = """
     <html>
-    <head>
-        <script src=\"https://cdn.jsdelivr.net/npm/chart.js\"></script>
-    </head>
     <body style=\"font-family: Arial; padding: 20px; max-width: 900px; margin: auto;\">
         <div id=\"relatorio\">
             <h2 style=\"text-align: center; color: #003366;\">Previsão de Arrombamentos e Tentativas - Região Av. Padre Pedro Pinto</h2>
@@ -35,23 +22,20 @@ def gerar_relatorio_html(df):
                 </tbody>
             </table>
             <hr>
-            <h3>2. Gráfico: Ocorrências por Dia da Semana</h3>
-            <canvas id=\"graficoDias\" width=\"600\" height=\"300\"></canvas>
-            <hr>
-            <h3>3. Recomendações para Prevenção e Ação Imediata</h3>
+            <h3>2. Recomendações para Prevenção e Ação Imediata</h3>
             <ul>
                 <li><strong>Policiamento Reforçado:</strong> Priorizar rondas nos horários e dias críticos.</li>
                 <li><strong>Monitoramento:</strong> Verifique alarmes e câmeras em horários de risco.</li>
                 <li><strong>Segurança nos Estabelecimentos:</strong> Reforce fechaduras e mantenha funcionários alertas.</li>
             </ul>
             <hr>
-            <h3>4. Ações Recomendadas para Lojistas</h3>
+            <h3>3. Ações Recomendadas para Lojistas</h3>
             <ul>
                 <li>Revisar medidas de segurança.</li>
                 <li>Divulgar previsões entre comerciantes da região.</li>
             </ul>
             <hr>
-            <h3>5. Próximos Passos</h3>
+            <h3>4. Próximos Passos</h3>
             <ul>
                 <li>Reunião entre lojistas e GCMBH.</li>
                 <li>Criação de grupo de alerta comunitário.</li>
@@ -60,29 +44,6 @@ def gerar_relatorio_html(df):
             <p><strong>Contato:</strong> Guarda Municipal de BH - Inspetoria Venda Nova</p>
             <button onclick=\"window.print()\">🖨️ Imprimir Relatório</button>
         </div>
-
-        <script>
-        setTimeout(function() {{
-            const ctx = document.getElementById('graficoDias').getContext('2d');
-            new Chart(ctx, {{
-                type: 'bar',
-                data: {{
-                    labels: {labels_json},
-                    datasets: [{{
-                        label: 'Ocorrências (%)',
-                        data: {valores_json},
-                        backgroundColor: '#004080'
-                    }}]
-                }},
-                options: {{
-                    responsive: true,
-                    scales: {{
-                        y: {{ beginAtZero: true }}
-                    }}
-                }}
-            }});
-        }}, 100);
-        </script>
     </body>
     </html>
     """
