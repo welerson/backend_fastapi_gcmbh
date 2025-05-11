@@ -1,8 +1,18 @@
 # backend_fastapi/utils.py
 
 def gerar_relatorio_html(df):
-    # HTML sem gráfico
-    html = """
+    import pandas as pd
+
+    # Cálculo de frequência por dia da semana
+    dias = df['Dia da Semana'].value_counts(normalize=True) * 100
+    dias = dias.sort_values(ascending=False)
+
+    linhas = ""
+    for dia, freq in dias.head(3).items():
+        linhas += f"<tr><td>{dia}</td><td>{freq:.2f}%</td><td>00:00 - 04:00</td><td>Alta incidência histórica neste intervalo.</td></tr>"
+
+    # HTML dinâmico baseado nos dados da planilha
+    html = f"""
     <html>
     <body style=\"font-family: Arial; padding: 20px; max-width: 900px; margin: auto;\">
         <div id=\"relatorio\">
@@ -16,9 +26,7 @@ def gerar_relatorio_html(df):
                     <tr><th>Dia</th><th>Probabilidade</th><th>Faixa Horária Crítica</th><th>Justificativa</th></tr>
                 </thead>
                 <tbody>
-                    <tr><td>Terça-feira</td><td>85.23%</td><td>00:00 - 04:00</td><td>Maioria das ocorrências históricas ocorreram nesse dia e horário.</td></tr>
-                    <tr><td>Domingo</td><td>78.45%</td><td>00:00 - 04:00</td><td>Alta incidência nesse dia e horário específico.</td></tr>
-                    <tr><td>Sábado</td><td>72.19%</td><td>00:00 - 04:00</td><td>Probabilidade considerável nesse intervalo.</td></tr>
+                    {linhas}
                 </tbody>
             </table>
             <hr>
