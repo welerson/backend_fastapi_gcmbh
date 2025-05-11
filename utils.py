@@ -9,6 +9,9 @@ def gerar_relatorio_html(df):
     labels = list(dias.index)
     valores = [round(p, 2) for p in dias.values]
 
+    labels_json = json.dumps(labels)
+    valores_json = json.dumps(valores)
+
     # HTML com estrutura completa e gráfico embutido
     html = f"""
     <div id=\"relatorio\" style=\"font-family: Arial; padding: 20px; max-width: 900px;\">
@@ -60,10 +63,10 @@ def gerar_relatorio_html(df):
         const chart = new Chart(ctx, {
             type: 'bar',
             data: {
-                labels: {json.dumps(labels)},
+                labels: {labels_json},
                 datasets: [{
                     label: 'Ocorrências (%)',
-                    data: {json.dumps(valores)},
+                    data: {valores_json},
                     backgroundColor: '#004080'
                 }]
             },
