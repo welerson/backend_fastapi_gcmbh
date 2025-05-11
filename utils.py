@@ -3,7 +3,7 @@
 def gerar_relatorio_html(df):
     import json
 
-    # Análise simples de exemplo: Ocorrência por dia da semana
+    # Análise: Ocorrência por dia da semana
     dias = df['Dia da Semana'].value_counts(normalize=True) * 100
     dias = dias.sort_index()
     labels = list(dias.index)
@@ -12,16 +12,16 @@ def gerar_relatorio_html(df):
     labels_json = json.dumps(labels)
     valores_json = json.dumps(valores)
 
-    # HTML com estrutura completa e gráfico embutido
+    # HTML com gráfico ajustado
     html = f"""
-    <div id=\"relatorio\" style=\"font-family: Arial; padding: 20px; max-width: 900px;\">
-        <h2 style=\"text-align: center; color: #003366;\">Previsão de Arrombamentos e Tentativas - Região Av. Padre Pedro Pinto</h2>
+    <div id="relatorio" style="font-family: Arial; padding: 20px; max-width: 900px;">
+        <h2 style="text-align: center; color: #003366;">Previsão de Arrombamentos e Tentativas - Região Av. Padre Pedro Pinto</h2>
         <p><strong>Gerado em:</strong> 11/05/2025</p>
         <p><strong>Modelo Utilizado:</strong> Análise Preditiva - Random Forest Classifier</p>
         <hr>
         <h3>1. Dias e Horários de Maior Risco para Arrombamentos</h3>
-        <table border=\"1\" cellpadding=\"8\" cellspacing=\"0\" style=\"border-collapse: collapse; width: 100%;\">
-            <thead style=\"background-color: #f2f2f2;\">
+        <table border="1" cellpadding="8" cellspacing="0" style="border-collapse: collapse; width: 100%;">
+            <thead style="background-color: #f2f2f2;">
                 <tr><th>Dia</th><th>Probabilidade</th><th>Faixa Horária Crítica</th><th>Justificativa</th></tr>
             </thead>
             <tbody>
@@ -32,7 +32,7 @@ def gerar_relatorio_html(df):
         </table>
         <hr>
         <h3>2. Gráfico: Ocorrências por Dia da Semana</h3>
-        <canvas id=\"graficoDias\" width=\"600\" height=\"300\"></canvas>
+        <canvas id="graficoDias" width="600" height="300"></canvas>
 
         <hr>
         <h3>3. Recomendações para Prevenção e Ação Imediata</h3>
@@ -55,28 +55,28 @@ def gerar_relatorio_html(df):
         </ul>
         <hr>
         <p><strong>Contato:</strong> Guarda Municipal de BH - Inspetoria Venda Nova</p>
-        <button onclick=\"window.print()\">🖨️ Imprimir Relatório</button>
+        <button onclick="window.print()">🖨️ Imprimir Relatório</button>
 
-        <script src=\"https://cdn.jsdelivr.net/npm/chart.js\"></script>
+        <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
         <script>
         const ctx = document.getElementById('graficoDias').getContext('2d');
-        const chart = new Chart(ctx, {
+        const chart = new Chart(ctx, {{
             type: 'bar',
-            data: {
+            data: {{
                 labels: {labels_json},
-                datasets: [{
+                datasets: [{{
                     label: 'Ocorrências (%)',
                     data: {valores_json},
                     backgroundColor: '#004080'
-                }]
-            },
-            options: {
+                }}]
+            }},
+            options: {{
                 responsive: true,
-                scales: {
-                    y: { beginAtZero: true }
-                }
-            }
-        });
+                scales: {{
+                    y: {{ beginAtZero: true }}
+                }}
+            }}
+        }});
         </script>
     </div>
     """
