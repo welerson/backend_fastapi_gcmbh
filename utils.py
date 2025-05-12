@@ -2,7 +2,6 @@
 
 def gerar_relatorio_html(df):
     import pandas as pd
-    import requests
 
     # Cálculo de frequência por dia da semana
     dias = df['Dia da Semana'].value_counts(normalize=True) * 100
@@ -19,20 +18,8 @@ def gerar_relatorio_html(df):
     porcent_alarme = (total_com_alarme / total_ocorrencias) * 100
     porcent_cameras = (total_com_cameras / total_ocorrencias) * 100
 
-    # API do clima (Venda Nova, BH)
-    try:
-        API_KEY = "613689b331c8e425c111385624ba5c55"
-        url = f"https://api.openweathermap.org/data/2.5/weather?lat=-19.8157&lon=-43.9542&appid={API_KEY}&units=metric&lang=pt_br"
-        response = requests.get(url, timeout=5)
-        response.raise_for_status()
-        dados_clima = response.json()
-
-        temp = dados_clima['main']['temp']
-        sensacao = dados_clima['main']['feels_like']
-        descricao = dados_clima['weather'][0]['description'].capitalize()
-        clima_atual = f"<p><strong>Clima Atual em Venda Nova:</strong> {descricao}, {temp:.1f}°C (sensação {sensacao:.1f}°C)</p>"
-    except Exception as e:
-        clima_atual = "<p><strong>Clima Atual (simulado):</strong> Nublado, 19.0°C (sensação 17.0°C)</p>"
+    # Clima simulado fixo
+    clima_atual = "<p><strong>Clima Atual (simulado):</strong> Nublado, 19.0°C (sensação 17.0°C)</p>"
 
     html = f"""
     <html>
