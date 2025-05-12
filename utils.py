@@ -19,9 +19,9 @@ def gerar_relatorio_html(df):
     porcent_alarme = (total_com_alarme / total_ocorrencias) * 100
     porcent_cameras = (total_com_cameras / total_ocorrencias) * 100
 
-    # API do clima (exemplo com coordenadas de Venda Nova, BH)
+    # API do clima (Venda Nova, BH)
     try:
-        API_KEY = "api.openweathermap.org/data/2.5/forecast?lat={lat}&lon={lon}&appid={API key}"  # Substituir pela chave real
+        API_KEY = "613689b331c8e425c111385624ba5c55"
         url = f"https://api.openweathermap.org/data/2.5/weather?lat=-19.8157&lon=-43.9542&appid={API_KEY}&units=metric&lang=pt_br"
         response = requests.get(url)
         dados_clima = response.json()
