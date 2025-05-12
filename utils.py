@@ -2,6 +2,7 @@
 
 def gerar_relatorio_html(df):
     import pandas as pd
+    import requests
 
     # Cálculo de frequência por dia da semana
     dias = df['Dia da Semana'].value_counts(normalize=True) * 100
@@ -18,6 +19,20 @@ def gerar_relatorio_html(df):
     porcent_alarme = (total_com_alarme / total_ocorrencias) * 100
     porcent_cameras = (total_com_cameras / total_ocorrencias) * 100
 
+    # API do clima (exemplo com coordenadas de Venda Nova, BH)
+    try:
+        API_KEY = "api.openweathermap.org/data/2.5/forecast?lat={lat}&lon={lon}&appid={API key}"  # Substituir pela chave real
+        url = f"https://api.openweathermap.org/data/2.5/weather?lat=-19.8157&lon=-43.9542&appid={API_KEY}&units=metric&lang=pt_br"
+        response = requests.get(url)
+        dados_clima = response.json()
+
+        temp = dados_clima['main']['temp']
+        sensacao = dados_clima['main']['feels_like']
+        descricao = dados_clima['weather'][0]['description'].capitalize()
+        clima_atual = f"<p><strong>Clima Atual em Venda Nova:</strong> {descricao}, {temp:.1f}°C (sensação {sensacao:.1f}°C)</p>"
+    except:
+        clima_atual = "<p><strong>Clima Atual:</strong> Não foi possível obter os dados meteorológicos no momento.</p>"
+
     html = f"""
     <html>
     <body style=\"font-family: Arial; padding: 20px; max-width: 900px; margin: auto;\">
@@ -25,6 +40,7 @@ def gerar_relatorio_html(df):
             <h2 style=\"text-align: center; color: #003366;\">Previsão de Arrombamentos e Tentativas - Região Av. Padre Pedro Pinto</h2>
             <p><strong>Gerado em:</strong> 11/05/2025</p>
             <p><strong>Modelo Utilizado:</strong> Análise Preditiva - Random Forest Classifier</p>
+            {clima_atual}
             <p><strong>Total de ocorrências analisadas:</strong> {total_ocorrencias}</p>
             <p><strong>Locais com alarme:</strong> {porcent_alarme:.1f}%</p>
             <p><strong>Locais com câmeras:</strong> {porcent_cameras:.1f}%</p>
@@ -39,14 +55,33 @@ def gerar_relatorio_html(df):
                 </tbody>
             </table>
             <hr>
-            <h3>2. Recomendações para Prevenção e Ação Imediata</h3>
+            <h3>2. Perfil Comportamental de Ação Delituosa</h3>
+            <p>Segundo análise de padrões comportamentais, indivíduos prestes a cometer arrombamentos geralmente consideram os seguintes fatores:</p>
+            <ul>
+                <li>Ausência de movimentação na rua</li>
+                <li>Pouca ou nenhuma iluminação pública</li>
+                <li>Tempo frio (ideal para uso de casacos que ocultam ferramentas)</li>
+                <li>Ruas laterais com fácil rota de fuga</li>
+                <li>Ambientes com baixa vigilância eletrônica</li>
+                <li>Rotina previsível do comércio</li>
+            </ul>
+            <hr>
+            <h3>3. Impacto das Condições Climáticas</h3>
+            <p>De acordo com estudos e dados históricos:</p>
+            <ul>
+                <li><strong>Dia de chuva:</strong> há redução nas ações criminosas devido à baixa visibilidade e menor circulação</li>
+                <li><strong>Dia frio:</strong> maior risco, pois facilita o transporte de ferramentas em mochilas ou sob roupas</li>
+                <li><strong>Clima nublado e sem vento:</strong> favorece aproximação silenciosa sem chamar atenção</li>
+            </ul>
+            <hr>
+            <h3>4. Recomendações para Prevenção e Ação Imediata</h3>
             <ul>
                 <li><strong>Policiamento Reforçado:</strong> Priorizar rondas nos horários e dias críticos.</li>
                 <li><strong>Monitoramento:</strong> Verifique alarmes e câmeras em horários de risco.</li>
                 <li><strong>Segurança nos Estabelecimentos:</strong> Reforce fechaduras, alarmes e iluminação.</li>
             </ul>
             <hr>
-            <h3>3. Ações Recomendadas para Lojistas</h3>
+            <h3>5. Ações Recomendadas para Lojistas</h3>
             <ul>
                 <li>Revisar medidas de segurança física e eletrônica.</li>
                 <li>Instalar câmeras com gravação noturna e alarmes monitorados.</li>
@@ -54,7 +89,7 @@ def gerar_relatorio_html(df):
                 <li>Divulgar previsões entre comerciantes da região.</li>
             </ul>
             <hr>
-            <h3>4. Próximos Passos</h3>
+            <h3>6. Próximos Passos</h3>
             <ul>
                 <li>Reunião entre lojistas e GCMBH.</li>
                 <li>Criação de grupo de alerta comunitário em tempo real.</li>
